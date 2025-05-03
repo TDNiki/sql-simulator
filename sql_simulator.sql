@@ -85,8 +85,8 @@ select
   poluitog1.date,
   paying_users,
   active_couriers,
-  round(100.0 * paying_users / total_users) as paying_users_share,
-  round(100.0 * active_couriers / total_couriers) as active_couriers_share
+  round(100.0 * paying_users / total_users, 2) as paying_users_share,
+  round(100.0 * active_couriers / total_couriers, 2) as active_couriers_share
 from(
     select
       tmp1.date as date,
@@ -201,8 +201,8 @@ from(
 
 select
   tmp1.date,
-  100.0 * num_users_1 / total_paid_users as single_order_users_share,
-  100.0 * num_users / total_paid_users as several_orders_users_share
+  round(100.0 * num_users_1 / total_paid_users, 2) as single_order_users_share,
+  round(100.0 * num_users / total_paid_users, 2) as several_orders_users_share
 from
   (
     select
@@ -471,7 +471,7 @@ from
 
 
 select tmp1.time::date as date,
- round(avg(EXTRACT('epoch' from tmp2.time - tmp1.time) / 60)) minutes_to_deliver
+ round(avg(EXTRACT('epoch' from tmp2.time - tmp1.time) / 60))::INT minutes_to_deliver
  from
 (select order_id,
 time
@@ -499,7 +499,7 @@ order by date
 Число отменённых заказов.
 Долю отменённых заказов в общем числе заказов (cancel rate).*/
 
-select successful_hour,
+select successful_hour::INT as hour,
 successful_orders,
 canceled_orders,
  round(canceled_orders::decimal / (successful_orders + canceled_orders), 3) as cancel_rate
